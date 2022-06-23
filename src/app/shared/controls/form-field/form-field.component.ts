@@ -19,6 +19,9 @@ export class FormFieldComponent implements OnInit {
   @Input()
   control!: AbstractControl;
 
+  @Input()
+  patternError = '';
+
   constructor() {
     this.isInline = true;
   }

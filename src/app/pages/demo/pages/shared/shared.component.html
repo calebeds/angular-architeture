@@ -12,6 +12,7 @@
     [required]="true"
     [control]="form.controls['input']"
     [isInline]="isInline"
+    [patternError]="regexErrors.numbers"
   >
     <app-input formControlName="input"></app-input>
   </app-form-field>
