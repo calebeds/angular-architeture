@@ -1,3 +1,4 @@
+import { Placeholder } from '@angular/compiler/src/i18n/i18n_ast';
 import {
   Component,
   EventEmitter,
@@ -26,7 +27,7 @@ type Value = number;
 })
 export class DateComponent implements OnInit, ControlValueAccessor {
   @Input()
-  placeholder = '';
+  placeholder!: string;
 
   @Input()
   min!: Date;
@@ -36,6 +37,9 @@ export class DateComponent implements OnInit, ControlValueAccessor {
 
   @Output()
   changed = new EventEmitter<Value>();
+
+  @Output()
+  closed = new EventEmitter<void>();
 
   value: Value = 0;
   isDisabled = false;
@@ -66,7 +70,7 @@ export class DateComponent implements OnInit, ControlValueAccessor {
     this.isDisabled = isDisabled;
   }
 
-  onChange(event: MatDatepickerInputEvent<Date>): void {
+  onChanged(event: MatDatepickerInputEvent<Date>): void {
     const value = event.value ? event.value.getTime() : 0;
     this.value = value;
     this.propagateChange(value);
@@ -75,5 +79,6 @@ export class DateComponent implements OnInit, ControlValueAccessor {
 
   onClosed(): void {
     this.propagateTouched();
+    this.closed.emit();
   }
 }

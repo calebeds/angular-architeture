@@ -4,7 +4,7 @@
     type="text"
     readonly
     [matDatepicker]="picker"
-    (dateChange)="onChange($event)"
+    (dateChange)="onChanged($event)"
     (click)="picker.open()"
     [attr.disabled]="isDisabled ? true : null"
     [value]="inputValue"
