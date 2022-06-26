@@ -45,6 +45,7 @@ export class SharedComponent implements OnInit {
         null,
         { updateOn: 'change', validators: [Validators.required] },
       ],
+      radios: [null, { updateOn: 'change', validators: [Validators.required] }],
     });
   }
 
