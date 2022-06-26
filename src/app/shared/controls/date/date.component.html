@@ -1,0 +1,21 @@
+<div class="date" style="display: inline-flex">
+  <input
+    class="app-input"
+    type="text"
+    readonly
+    [matDatepicker]="picker"
+    (dateChange)="onChange($event)"
+    (click)="picker.open()"
+    [attr.disabled]="isDisabled ? true : null"
+    [value]="inputValue"
+    [min]="min"
+    [max]="max"
+    placeholder="{{ placeholder || 'Choose a date' }}"
+  />
+  <mat-datepicker-toggle
+    max-suffix
+    [for]="picker"
+    [disabled]="isDisabled"
+  ></mat-datepicker-toggle>
+  <mat-datepicker #picker (closed)="onClosed()"></mat-datepicker>
+</div>
