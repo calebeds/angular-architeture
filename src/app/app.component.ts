@@ -4,18 +4,12 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'course-app';
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore) {}
 
-  }
-
-  ngOnInit() {
-    this.afs.collection('test').snapshotChanges().subscribe(items => {
-      console.log(items.map(rawData => rawData.payload.doc.data()));//Getting the actual items
-    });
-  }
+  ngOnInit() {}
 }
