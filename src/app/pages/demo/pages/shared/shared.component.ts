@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { regex, regexErrors } from '@app/shared';
+import { regex, regexErrors, markFormGroupTouched } from '@app/shared';
 import { ControlItem } from '@app/models/frontend';
 
 @Component({
@@ -59,14 +59,40 @@ export class SharedComponent implements OnInit {
   }
 
   onPatchValue() {
-    this.form.patchValue({ input: 'test' });
+    this.form.patchValue({
+      input: 123,
+      password: 'qwerty',
+      autocomplete: 1,
+      select: 2,
+      checkboxes: [3],
+      radios: 4,
+      date: new Date().getTime(),
+      dateRange: {
+        from: new Date(2019, 5, 10).getTime(),
+        to: new Date(2020, 6, 25).getTime(),
+      },
+    });
   }
 
   onSubmit(): void {
     console.log('Submit');
+    if (!this.form.valid) {
+      markFormGroupTouched(this.form);
+    }
   }
 
   onToggleInline(): void {
     this.isInline = !this.isInline;
   }
+
+  onToggleDisabled(): void {
+    if (this.form.enabled) this.form.disable();
+    else this.form.enable();
+  }
+
+  onToggleSpinner(): void {}
+
+  onSuccess(): void {}
+
+  onError(): void {}
 }

@@ -47,7 +47,7 @@ export class CheckboxesComponent implements OnInit, ControlValueAccessor {
 
   registerOnTouched(fn: any): void {}
 
-  setDIsabledState(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
 
