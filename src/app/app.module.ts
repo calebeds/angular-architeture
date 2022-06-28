@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { environment } from '../environments/environment';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { FirestoreModule } from '@angular/fire/firestore';
@@ -29,13 +32,19 @@ const APP_DATE_FORMATS: MatDateFormats = {
 // Services
 import { NotificationModule } from './services';
 
+// Store
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+const storeDevtools = !environment.production
+  ? StoreDevtoolsModule.instrument({
+      maxAge: 50,
+    })
+  : [];
+import { reducers, effects } from './store';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
@@ -56,6 +65,15 @@ import { HeaderComponent } from './components/header/header.component';
     StorageModule,
 
     MatNativeDateModule,
+
+    StoreModule.forRoot(reducers, {
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+      },
+    }),
+    EffectsModule.forRoot(effects),
+    storeDevtools,
 
     //Service
     NotificationModule.forRoot(),
