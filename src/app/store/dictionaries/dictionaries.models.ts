@@ -2,7 +2,7 @@ import { Item, ControlItem } from '@app/models/frontend';
 export { Item, ControlItem } from '@app/models/frontend';
 
 export interface Dictionaries {
-  rules: Dictionary;
+  roles: Dictionary;
   specializations: Dictionary;
   qualifications: Dictionary;
   skills: Dictionary;
