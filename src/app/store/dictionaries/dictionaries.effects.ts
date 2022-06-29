@@ -17,6 +17,16 @@ import {
 } from './dictionaries.models';
 
 import * as fromActions from './dictionaries.actions';
+import jsonCountries from '../../../assets/countries.json';
+
+const countries = jsonCountries.map((country) => ({
+  id: country.code.toUpperCase(),
+  name: country.name,
+  icon: {
+    src: '',
+    cssClass: `fflag fflag-${country.code.toUpperCase()}`,
+  },
+}));
 
 type Action = fromActions.All;
 
@@ -75,14 +85,16 @@ export class DictionariesEffects {
           .pipe(
             take(1),
             map((items) => items.map((x) => documentToItem(x)))
-          )
+          ),
+        of(countries)
       ).pipe(
-        map(([roles, specializations, qualifications, skills]) => {
+        map(([roles, specializations, qualifications, skills, countries]) => {
           const dictionaries: Dictionaries = {
             roles: addDictionary(roles),
             specializations: addDictionary(specializations),
             qualifications: addDictionary(qualifications),
             skills: addDictionary(skills),
+            countries: addDictionary(countries),
           };
           return new fromActions.ReadSuccess(dictionaries);
         }),
