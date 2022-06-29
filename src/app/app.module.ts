@@ -36,11 +36,12 @@ import { NotificationModule } from './services';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-const storeDevtools = !environment.production
-  ? StoreDevtoolsModule.instrument({
-      maxAge: 50,
-    })
-  : [];
+// const StoreDevtools = environment.production
+//   ? StoreDevtoolsModule.instrument({
+//       maxAge: 25, // Retains last 25 states
+//       logOnly: environment.production, // Restrict extension to log-only mode
+//     })
+//   : [];
 import { reducers, effects } from './store';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -66,14 +67,18 @@ import { HeaderComponent } from './components/header/header.component';
 
     MatNativeDateModule,
 
+    EffectsModule.forRoot(effects),
     StoreModule.forRoot(reducers, {
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
       },
     }),
-    EffectsModule.forRoot(effects),
-    storeDevtools,
+    // StoreDevtools,
+    StoreDevtoolsModule.instrument({
+      maxAge: 50, // Retains last 50 states
+      logOnly: environment.production, // Restrict extension to log-only mode
+    }),
 
     //Service
     NotificationModule.forRoot(),
