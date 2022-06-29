@@ -1,6 +1,8 @@
 import { FieldValue } from 'firebase/firestore';
 import { Employee, Recruiter } from './roles';
 
+export * from './roles';
+
 export interface User {
   uid: string;
   name: string;
