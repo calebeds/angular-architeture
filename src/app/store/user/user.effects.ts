@@ -5,22 +5,13 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
-import { environment } from '@src/environments/environment';
+import { environment } from '../../../environments/environment';
 import { EmailPasswordCredentials, User } from './user.models';
 
 import * as fromActions from './user.actions';
 
 import { NotificationService } from '@app/services';
-import {
-  catchError,
-  from,
-  map,
-  Observable,
-  of,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
+import { catchError, from, map, of, switchMap, take, tap } from 'rxjs';
 
 // type Action = fromActions.All;
 
