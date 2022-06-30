@@ -28,7 +28,7 @@ const countries = jsonCountries.map((country) => ({
   },
 }));
 
-type Action = fromActions.All;
+// type Action = fromActions.All;
 
 const documentToItem = (x: DocumentChangeAction<any>): Item => {
   const data = x.payload.doc.data();
@@ -53,54 +53,55 @@ const addDictionary = (items: Item[]): Dictionary => ({
 export class DictionariesEffects {
   constructor(private actions: Actions, private afs: AngularFirestore) {}
 
-  @Effect()
-  read: Observable<Action> = this.actions.pipe(
-    ofType(fromActions.Types.READ),
-    switchMap(() => {
-      return zip(
-        this.afs
-          .collection('roles')
-          .snapshotChanges()
-          .pipe(
-            take(1),
-            map((items) => items.map((x) => documentToItem(x)))
-          ),
-        this.afs
-          .collection('specializations')
-          .snapshotChanges()
-          .pipe(
-            take(1),
-            map((items) => items.map((x) => documentToItem(x)))
-          ),
-        this.afs
-          .collection('qualifications')
-          .snapshotChanges()
-          .pipe(
-            take(1),
-            map((items) => items.map((x) => documentToItem(x)))
-          ),
-        this.afs
-          .collection('skills')
-          .snapshotChanges()
-          .pipe(
-            take(1),
-            map((items) => items.map((x) => documentToItem(x)))
-          ),
-        of(countries)
-      ).pipe(
-        map(([roles, specializations, qualifications, skills, countries]) => {
-          const dictionaries: Dictionaries = {
-            roles: addDictionary(roles),
-            specializations: addDictionary(specializations),
-            qualifications: addDictionary(qualifications),
-            skills: addDictionary(skills),
-            countries: addDictionary(countries),
-          };
-          return new fromActions.ReadSuccess(dictionaries);
-        }),
-        catchError((err) => of(new fromActions.ReadError(err.message)))
-      );
-    })
+  read = createEffect(() =>
+    this.actions.pipe(
+      ofType(fromActions.Types.READ),
+      switchMap(() => {
+        return zip(
+          this.afs
+            .collection('roles')
+            .snapshotChanges()
+            .pipe(
+              take(1),
+              map((items) => items.map((x) => documentToItem(x)))
+            ),
+          this.afs
+            .collection('specializations')
+            .snapshotChanges()
+            .pipe(
+              take(1),
+              map((items) => items.map((x) => documentToItem(x)))
+            ),
+          this.afs
+            .collection('qualifications')
+            .snapshotChanges()
+            .pipe(
+              take(1),
+              map((items) => items.map((x) => documentToItem(x)))
+            ),
+          this.afs
+            .collection('skills')
+            .snapshotChanges()
+            .pipe(
+              take(1),
+              map((items) => items.map((x) => documentToItem(x)))
+            ),
+          of(countries)
+        ).pipe(
+          map(([roles, specializations, qualifications, skills, countries]) => {
+            const dictionaries: Dictionaries = {
+              roles: addDictionary(roles),
+              specializations: addDictionary(specializations),
+              qualifications: addDictionary(qualifications),
+              skills: addDictionary(skills),
+              countries: addDictionary(countries),
+            };
+            return fromActions.readSuccess({ dictionaries: dictionaries });
+          }),
+          catchError((err) => of(fromActions.readError(err.message)))
+        );
+      })
+    )
   );
 
   //   read: Observable<Action> = createEffect(() => {

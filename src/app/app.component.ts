@@ -16,6 +16,6 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
-    this.store.dispatch(new fromDictionaries.Read());
+    this.store.dispatch(fromDictionaries.read());
   }
 }

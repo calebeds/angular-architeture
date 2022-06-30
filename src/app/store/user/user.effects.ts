@@ -6,7 +6,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 import { environment } from '@src/environments/environment';
-import { User } from './user.models';
+import { EmailPasswordCredentials, User } from './user.models';
 
 import * as fromActions from './user.actions';
 
@@ -22,7 +22,7 @@ import {
   tap,
 } from 'rxjs';
 
-type Action = fromActions.All;
+// type Action = fromActions.All;
 
 @Injectable()
 export class UserEffects {
@@ -34,10 +34,13 @@ export class UserEffects {
     private notifications: NotificationService
   ) {}
 
-  signInEmail: Observable<Action> = createEffect(() => {
+  signInEmail = createEffect(() => {
     return this.actions.pipe(
       ofType(fromActions.Types.SIGN_IN_EMAIL),
-      map((action: fromActions.SignInEmail) => action.credentials),
+      map(
+        (action: { credentials: EmailPasswordCredentials; user: User }) =>
+          action.credentials
+      ),
       switchMap((credentials) =>
         from(
           this.afAuth.signInWithEmailAndPassword(
@@ -51,28 +54,30 @@ export class UserEffects {
               .valueChanges()
               .pipe(
                 take(1),
-                map(
-                  (user) =>
-                    new fromActions.SignInEmailSuccess(
-                      signInState.user!.uid,
-                      user || ({} as any)
-                    )
+                map((user) =>
+                  fromActions.signInEmailSuccess({
+                    uid: signInState.user!.uid,
+                    user: user || ({} as any),
+                  })
                 )
               )
           ),
           catchError((err) => {
             this.notifications.error(err.message);
-            return of(new fromActions.SignInEmailError(err.message));
+            return of(fromActions.signInEmailError(err.message));
           })
         )
       )
     );
   });
 
-  signUpEmail: Observable<Action> = createEffect(() => {
+  signUpEmail = createEffect(() => {
     return this.actions.pipe(
       ofType(fromActions.Types.SIGN_UP_EMAIL),
-      map((action: fromActions.SignInEmail) => action.credentials),
+      map(
+        (action: { credentials: EmailPasswordCredentials }) =>
+          action.credentials
+      ),
       switchMap((credentials) =>
         from(
           this.afAuth.createUserWithEmailAndPassword(
@@ -87,25 +92,24 @@ export class UserEffects {
               )
             );
           }),
-          map(
-            (signUpState) =>
-              new fromActions.SignUpEmailSuccess(signUpState.user!.uid)
+          map((signUpState) =>
+            fromActions.signUpEmailSuccess({ uid: signUpState.user!.uid })
           ),
           catchError((err) => {
             this.notifications.error(err.message);
-            return of(new fromActions.SignUpEmailError(err.message));
+            return of(fromActions.signUpEmailError(err.message));
           })
         )
       )
     );
   });
 
-  signOut: Observable<Action> = this.actions.pipe(
+  signOut = this.actions.pipe(
     ofType(fromActions.Types.SIGN_OUT),
     switchMap(() =>
       from(this.afAuth.signOut()).pipe(
-        map(() => new fromActions.SignOutSuccess()),
-        catchError((err) => of(new fromActions.SignOutError(err.message)))
+        map(() => fromActions.signOutSuccess()),
+        catchError((err) => of(fromActions.signOutError(err.message)))
       )
     )
   );

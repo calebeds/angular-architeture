@@ -54,12 +54,6 @@ import { HeaderComponent } from './components/header/header.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    EffectsModule.forRoot([]),
-    StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({
-      maxAge: 25,
-      logOnly: environment.production,
-    }),
     AngularFireModule.initializeApp(environment.firebase.config),
     FirestoreModule,
     AuthModule,
