@@ -6,7 +6,7 @@
   <form
     [formGroup]="form"
     (submit)="onSubmit()"
-    (keyup)="onSubmit()"
+    (keyup.enter)="onSubmit()"
     novalidate
     autocomplete
   >
@@ -49,5 +49,8 @@
     <div class="error" [class.error_active]="form.hasError('repeat')">
       Entered passwords don't match
     </div>
+
+    <app-spinner *ngIf="loading$ | async"></app-spinner>
+    <!-- <app-spinner></app-spinner> -->
   </form>
 </div>

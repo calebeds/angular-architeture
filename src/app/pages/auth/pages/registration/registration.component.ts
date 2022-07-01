@@ -6,6 +6,7 @@ import { regex, regexErrors, markFormGroupTouched } from '@app/shared';
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from '@app/store';
 import * as fromUser from '@app/store/user';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-registration',
@@ -15,12 +16,14 @@ import * as fromUser from '@app/store/user';
 })
 export class RegistrationComponent implements OnInit {
   form!: FormGroup;
-
   regexErrors = regexErrors;
+  loading$ = new Observable<boolean>();
 
   constructor(private fb: FormBuilder, private store: Store<fromRoot.State>) {}
 
   ngOnInit(): void {
+    this.loading$ = this.store.pipe(select(fromUser.getLoading));
+
     this.form = this.fb.group(
       {
         email: [
@@ -64,18 +67,28 @@ export class RegistrationComponent implements OnInit {
   }
 
   private repeatPasswordValidator(group: FormGroup): {
-    [key: string]: boolean; //It doesn't make sense
-  } {
+    [key: string]: boolean;
+  } | null {
     const password = group.get('password');
     const passwordRepeat = group.get('passwordRepeat');
 
+    console.log(password?.value);
+    console.log(passwordRepeat?.value);
+
     return passwordRepeat?.value && password?.value !== passwordRepeat.value
       ? { repeat: true }
-      : { repeat: false };
+      : null;
   }
 
   onSubmit(): void {
+    console.log(this.form.errors);
     if (this.form.valid) {
+      const value = this.form.value;
+      const credentials: fromUser.EmailPasswordCredentials = {
+        email: value.email,
+        password: value.password,
+      };
+      this.store.dispatch(fromUser.signUpEmail({ credentials }));
     } else {
       markFormGroupTouched(this.form);
     }
