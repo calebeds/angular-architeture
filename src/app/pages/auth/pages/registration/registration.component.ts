@@ -1,7 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { regex, regexErrors, markFormGroupTouched } from '@app/shared';
+import {
+  regexErrors,
+  markFormGroupTouched,
+  validatorOptionsEmail,
+  validatorOptionsPassword,
+} from '@app/shared';
 
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from '@app/store';
@@ -26,41 +31,9 @@ export class RegistrationComponent implements OnInit {
 
     this.form = this.fb.group(
       {
-        email: [
-          null,
-          {
-            updateOn: 'blur',
-            validators: [
-              Validators.required,
-              Validators.maxLength(120),
-              Validators.pattern(regex.email),
-            ],
-          },
-        ],
-        password: [
-          null,
-          {
-            updateOn: 'blur',
-            validators: [
-              Validators.required,
-              Validators.minLength(6),
-              Validators.maxLength(30),
-              Validators.pattern(regex.password),
-            ],
-          },
-        ],
-        passwordRepeat: [
-          null,
-          {
-            updateOn: 'blur',
-            validators: [
-              Validators.required,
-              Validators.minLength(6),
-              Validators.maxLength(30),
-              Validators.pattern(regex.password),
-            ],
-          },
-        ],
+        email: [null, validatorOptionsEmail],
+        password: [null, validatorOptionsPassword],
+        passwordRepeat: [null, validatorOptionsPassword],
       },
       { validator: this.repeatPasswordValidator }
     );
@@ -71,9 +44,6 @@ export class RegistrationComponent implements OnInit {
   } | null {
     const password = group.get('password');
     const passwordRepeat = group.get('passwordRepeat');
-
-    console.log(password?.value);
-    console.log(passwordRepeat?.value);
 
     return passwordRepeat?.value && password?.value !== passwordRepeat.value
       ? { repeat: true }
