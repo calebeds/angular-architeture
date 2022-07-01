@@ -82,6 +82,7 @@ export class UserEffects {
                 environment.firebase.actionCodeSettings
               )
             );
+            this.router.navigate(['/auth/email-confirm']);
           }),
           map((signUpState) =>
             fromActions.signUpEmailSuccess({ uid: signUpState.user!.uid })

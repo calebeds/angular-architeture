@@ -6,7 +6,7 @@ import {
   markFormGroupTouched,
   validatorOptionsEmail,
   validatorOptionsPassword,
-} from '@app/shared';
+} from 'app/shared';
 
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from '@app/store';
