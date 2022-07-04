@@ -123,13 +123,15 @@ export class UserEffects {
     );
   });
 
-  signOut = this.actions.pipe(
-    ofType(fromActions.Types.SIGN_OUT),
-    switchMap(() =>
-      from(this.afAuth.signOut()).pipe(
-        map(() => fromActions.signOutSuccess()),
-        catchError((err) => of(fromActions.signOutError(err.message)))
+  signOut = createEffect(() => {
+    return this.actions.pipe(
+      ofType(fromActions.Types.SIGN_OUT),
+      switchMap(() =>
+        from(this.afAuth.signOut()).pipe(
+          map(() => fromActions.signOutSuccess()),
+          catchError((err) => of(fromActions.signOutError(err.message)))
+        )
       )
-    )
-  );
+    );
+  });
 }

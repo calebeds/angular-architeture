@@ -3,9 +3,9 @@ import { User, EmailPasswordCredentials } from './user.models';
 
 export enum Types {
   INIT = '[User] Init: Start',
-  INIT_AUTHORIZED = '[USER] Init: Authorized',
-  INIT_UNAUTHORIZED = '[USER] Init: Unauthorized',
-  INIT_ERROR = '[USER] Init: Error',
+  INIT_AUTHORIZED = '[User] Init: Authorized',
+  INIT_UNAUTHORIZED = '[User] Init: Unauthorized',
+  INIT_ERROR = '[User] Init: Error',
 
   SIGN_IN_EMAIL = '[User] Sign In with email: Start',
   SIGN_IN_EMAIL_SUCCESS = '[User] Sign In with email: Sucess',
