@@ -72,6 +72,9 @@ export class UserEffects {
               .valueChanges()
               .pipe(
                 take(1),
+                tap(() => {
+                  this.router.navigate(['/']);
+                }),
                 map((user) =>
                   fromActions.signInEmailSuccess({
                     uid: signInState.user!.uid,

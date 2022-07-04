@@ -5,7 +5,7 @@ import {
   regexErrors,
   markFormGroupTouched,
   validatorOptionsEmail,
-  validatorOptionsPassword,
+  validatorOptionsRegPassword,
 } from 'app/shared';
 
 import { Store, select } from '@ngrx/store';
@@ -32,8 +32,8 @@ export class RegistrationComponent implements OnInit {
     this.form = this.fb.group(
       {
         email: [null, validatorOptionsEmail],
-        password: [null, validatorOptionsPassword],
-        passwordRepeat: [null, validatorOptionsPassword],
+        password: [null, validatorOptionsRegPassword],
+        passwordRepeat: [null, validatorOptionsRegPassword],
       },
       { validator: this.repeatPasswordValidator }
     );

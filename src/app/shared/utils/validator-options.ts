@@ -10,7 +10,7 @@ export const validatorOptionsEmail: AbstractControlOptions = {
   ],
 };
 
-export const validatorOptionsPassword: AbstractControlOptions = {
+export const validatorOptionsRegPassword: AbstractControlOptions = {
   updateOn: 'blur',
   validators: [
     Validators.required,
