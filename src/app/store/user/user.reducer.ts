@@ -1,6 +1,7 @@
 import { User } from './user.models';
 import * as fromActions from './user.actions';
 import { createReducer, on } from '@ngrx/store';
+import { state } from '@angular/animations';
 
 export interface UserState {
   entity: User;
@@ -75,6 +76,25 @@ const initialState: UserState = {
 
 export const reducer = createReducer(
   initialState,
+  on(fromActions.init, (state) => ({ ...state, loading: true })),
+  on(fromActions.initAuthorized, (state, { user, uid }) => ({
+    ...state,
+    entity: user,
+    uid: uid,
+    loading: false,
+    error: '',
+  })),
+  on(fromActions.initUnauthorized, (state) => ({
+    ...state,
+    entity: {} as any,
+    loading: false,
+    error: '',
+  })),
+  on(fromActions.initError, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error: error,
+  })),
   on(fromActions.signInEmail, (state) => ({ ...state, loading: true })),
   on(fromActions.signInEmailSuccess, (state, { user, uid }) => ({
     ...state,

@@ -25,6 +25,33 @@ export class UserEffects {
     private notifications: NotificationService
   ) {}
 
+  init = createEffect(() => {
+    return this.actions.pipe(
+      ofType(fromActions.Types.INIT),
+      switchMap(() => this.afAuth.authState.pipe(take(1))),
+      switchMap((authState) => {
+        console.log('AuthState');
+        if (authState) {
+          return this.afs
+            .doc<User>(`users/${authState.uid}`)
+            .valueChanges()
+            .pipe(
+              take(1),
+              map((user) =>
+                fromActions.initAuthorized({
+                  uid: authState.uid,
+                  user: <User>user,
+                })
+              ),
+              catchError((err) => of(fromActions.initError(err.message)))
+            );
+        } else {
+          return of(fromActions.initUnauthorized());
+        }
+      })
+    );
+  });
+
   signInEmail = createEffect(() => {
     return this.actions.pipe(
       ofType(fromActions.Types.SIGN_IN_EMAIL),

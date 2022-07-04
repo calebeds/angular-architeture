@@ -1,7 +1,12 @@
-import { Action, createAction, props } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { User, EmailPasswordCredentials } from './user.models';
 
 export enum Types {
+  INIT = '[User] Init: Start',
+  INIT_AUTHORIZED = '[USER] Init: Authorized',
+  INIT_UNAUTHORIZED = '[USER] Init: Unauthorized',
+  INIT_ERROR = '[USER] Init: Error',
+
   SIGN_IN_EMAIL = '[User] Sign In with email: Start',
   SIGN_IN_EMAIL_SUCCESS = '[User] Sign In with email: Sucess',
   SIGN_IN_EMAIL_ERROR = '[User] Sign In with email: Error',
@@ -76,6 +81,22 @@ export enum Types {
 //   | SignOut
 //   | SignOutSuccess
 //   | SignOutError;
+
+// Init
+
+export const init = createAction(Types.INIT);
+
+export const initAuthorized = createAction(
+  Types.INIT_AUTHORIZED,
+  props<{ uid: string; user: User }>()
+);
+
+export const initUnauthorized = createAction(Types.INIT_UNAUTHORIZED);
+
+export const initError = createAction(
+  Types.INIT_ERROR,
+  props<{ error: string }>()
+);
 
 // Sign In
 
