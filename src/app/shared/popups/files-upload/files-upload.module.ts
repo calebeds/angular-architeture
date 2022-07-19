@@ -7,9 +7,16 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { FilesUploadDirective } from './files-upload.directive';
 import { FilesUploadComponent } from './files-upload.component';
 import { DropZoneDirective } from './directives/drop-zone/drop-zone.directive';
+import { UploadComponent } from './components/upload/upload.component';
+import { StorageModule } from '@angular/fire/storage';
 
 @NgModule({
-  declarations: [FilesUploadDirective, FilesUploadComponent, DropZoneDirective],
+  declarations: [
+    FilesUploadDirective,
+    FilesUploadComponent,
+    DropZoneDirective,
+    UploadComponent,
+  ],
   imports: [CommonModule, MatDialogModule, ImageCropperModule],
   exports: [FilesUploadDirective],
 })
