@@ -10,6 +10,7 @@ import { DropZoneDirective } from './directives/drop-zone/drop-zone.directive';
 import { UploadComponent } from './components/upload/upload.component';
 import { StorageModule } from '@angular/fire/storage';
 import { FileSizePipe } from './pipes/file-size/file-size.pipe';
+import { CropperComponent } from './cropper/cropper.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { FileSizePipe } from './pipes/file-size/file-size.pipe';
     DropZoneDirective,
     UploadComponent,
     FileSizePipe,
+    CropperComponent,
   ],
   imports: [CommonModule, MatDialogModule, ImageCropperModule],
   exports: [FilesUploadDirective],

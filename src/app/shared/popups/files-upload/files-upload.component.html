@@ -25,6 +25,14 @@
           </label>
         </div>
       </div>
+      <div class="error" *ngIf="isError">Choose only one file</div>
+    </ng-container>
+
+    <ng-container *ngIf="imageFile">
+      <app-cropper
+        [imageFile]="imageFile"
+        (changed)="onCrop($event)"
+      ></app-cropper>
     </ng-container>
 
     <ng-container *ngIf="files">
@@ -34,9 +42,14 @@
         (completed)="onUploadComplete($event)"
       ></app-upload>
     </ng-container>
-
-    <div class="error" *ngIf="isError">Choose only one file</div>
   </div>
 
-  <div class="files-upload__footer"></div>
+  <div class="files-upload__footer" *ngIf="!imageFile">
+    <button class="app-button" (click)="onClose()" *ngIf="!fileUrls.length">
+      Close
+    </button>
+    <button class="app-button" (click)="onComplete()" *ngIf="fileUrls.length">
+      Complete
+    </button>
+  </div>
 </div>
