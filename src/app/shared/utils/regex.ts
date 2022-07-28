@@ -5,7 +5,7 @@ export const regex = {
   latin: /^[A-Za-z-\s]+$/,
   numbers: /^\d+$/,
   latinAndNumbers: /^[A-Za-z0-9]+$/,
-  latinAndSpaces: /^[0-9-]+$/,
+  latinAndSpaces: /^[A-Za-z ]+$/,
   safe: /^([\sA-Za-z0-9!@#$%^&*()_+\-+\[\]{};':"\\|,.<>\/?])/,
 };
 
