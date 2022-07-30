@@ -27,7 +27,7 @@ export { ControlItem, Value } from '@app/models/frontend';
 })
 export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input()
-  items!: ControlItem[];
+  items!: ControlItem[] | undefined;
 
   @Input()
   placeholder = '';

@@ -23,7 +23,7 @@ import { ControlItem, Value } from '../select/select.component';
 })
 export class CheckboxesComponent implements OnInit, ControlValueAccessor {
   @Input()
-  items!: ControlItem[];
+  items: ControlItem[] | undefined;
 
   @Output()
   changed = new EventEmitter<Value[]>();
