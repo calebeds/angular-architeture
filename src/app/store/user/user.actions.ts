@@ -1,5 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { User, EmailPasswordCredentials } from './user.models';
+import {
+  User,
+  EmailPasswordCredentials,
+  UserCreateRequest,
+} from './user.models';
 
 export enum Types {
   INIT = '[User] Init: Start',
@@ -18,6 +22,14 @@ export enum Types {
   SIGN_OUT = '[User] Sign Out: Start',
   SIGN_OUT_SUCCESS = '[User] Sign Out: Success',
   SIGN_OUT_ERROR = '[User] Sing Out: Error',
+
+  CREATE = '[User] Create: Start',
+  CREATE_SUCCESS = '[User] Create: Success',
+  CREATE_ERROR = '[User] Create; Error ',
+
+  UPDATE = '[User] Update: Start',
+  UPDATE_SUCCESS = '[User] Update: Success',
+  UPDATE_ERROR = '[User] Update: Error',
 }
 
 // // Sign In
@@ -140,5 +152,28 @@ export const signOutSuccess = createAction(Types.SIGN_OUT_SUCCESS);
 
 export const signOutError = createAction(
   Types.SIGN_OUT_ERROR,
+  props<{ error: string }>()
+);
+
+export const create = createAction(
+  Types.CREATE,
+  props<{ user: UserCreateRequest }>()
+);
+export const createSuccess = createAction(
+  Types.CREATE_SUCCESS,
+  props<{ user: User }>()
+);
+export const createError = createAction(
+  Types.CREATE_ERROR,
+  props<{ error: string }>()
+);
+
+export const update = createAction(Types.UPDATE, props<{ user: User }>());
+export const updateSuccess = createAction(
+  Types.UPDATE_SUCCESS,
+  props<{ user: User }>()
+);
+export const updateError = createAction(
+  Types.UPDATE_ERROR,
   props<{ error: string }>()
 );

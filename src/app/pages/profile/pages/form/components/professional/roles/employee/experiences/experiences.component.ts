@@ -1,9 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Period } from '@app/models/backend/user/roles/employee';
 
 export interface ExperienceForm {
   companyName: string;
-  period: Date;
+  period: Period;
 }
 
 @Component({

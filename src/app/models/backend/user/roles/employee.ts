@@ -26,7 +26,7 @@ interface Experience {
   period: Period;
 }
 
-interface Period {
+export interface Period {
   from: number;
   to: number;
 }

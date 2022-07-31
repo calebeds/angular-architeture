@@ -2,6 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Dictionaries } from '@app/store/dictionaries';
 import { RecruiterForm } from '../recruiter/recruiter.component';
+
+import { ControlEntities, mapControls } from '@app/shared';
+
 import { ExperienceForm } from './experiences/experiences.component';
 
 export interface EmployeeForm {
@@ -32,6 +35,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   form = new FormGroup({});
 
+  controls!: ControlEntities;
+
   get experiences() {
     return this.value ? (this.value as EmployeeForm).experiences : undefined;
   }
@@ -52,23 +57,68 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         },
       ],
       qualification: [
-        null,
+        { value: null, disabled: true },
         {
           updateOn: 'change',
           validators: [Validators.required],
         },
       ],
       skills: [
-        null,
+        { value: null, disabled: true },
         {
           updateOn: 'change',
           validators: [Validators.required],
         },
       ],
     });
+
+    this.controls = {
+      specialization: {
+        items: this.dictionaries?.specializations.controlItems,
+        changed: () => {
+          this.controls['qualification'].map?.();
+          this.controls['skills'].map?.();
+        },
+      },
+      qualification: {
+        items: this.dictionaries?.qualifications.controlItems,
+        map: () => {
+          if (this.form.value['specialization']) {
+            this.form.controls['qualification'].enable();
+          } else {
+            this.form.controls['qualification'].reset();
+            this.form.controls['qualification'].disable();
+          }
+        },
+      },
+      skills: {
+        items: this.dictionaries?.skills.controlItems,
+        map: () => {
+          if (this.form.value['specialization']) {
+            this.form.controls['skills'].enable();
+
+            const items = [
+              ...(this.dictionaries?.skills.controlItems || []),
+            ].map((item, index) => ({
+              ...item,
+              label: `${item.label} (${index + 1})`,
+            }));
+
+            this.controls['skills'].items = items;
+          } else {
+            this.form.controls['skills'].reset();
+            this.form.controls['skills'].disable();
+          }
+        },
+      },
+    };
+
     if (this.value) {
       this.form.patchValue(this.value);
     }
+
+    mapControls(this.controls);
+
     this.parent.addControl(this.name, this.form);
   }
 

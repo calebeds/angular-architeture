@@ -23,6 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EmployeeComponent } from './components/professional/roles/employee/employee.component';
 import { RecruiterComponent } from './components/professional/roles/recruiter/recruiter.component';
 import { ExperiencesComponent } from './components/professional/roles/employee/experiences/experiences.component';
+import { MapperService } from './services';
 
 @NgModule({
   declarations: [
@@ -51,5 +52,6 @@ import { ExperiencesComponent } from './components/professional/roles/employee/e
     ButtonModule,
     ReactiveFormsModule,
   ],
+  providers: [MapperService],
 })
 export class FormModule {}

@@ -6,12 +6,26 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 import { environment } from '../../../environments/environment';
-import { EmailPasswordCredentials, User } from './user.models';
+import {
+  EmailPasswordCredentials,
+  User,
+  UserCreateRequest,
+} from './user.models';
 
 import * as fromActions from './user.actions';
 
 import { NotificationService } from '@app/services';
-import { catchError, from, map, of, switchMap, take, tap } from 'rxjs';
+import {
+  catchError,
+  from,
+  map,
+  of,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
+import { FieldValue, serverTimestamp } from 'firebase/firestore';
 
 // type Action = fromActions.All;
 
@@ -133,6 +147,41 @@ export class UserEffects {
         from(this.afAuth.signOut()).pipe(
           map(() => fromActions.signOutSuccess()),
           catchError((err) => of(fromActions.signOutError(err.message)))
+        )
+      )
+    );
+  });
+
+  create = createEffect(() => {
+    return this.actions.pipe(
+      ofType(fromActions.Types.CREATE),
+      map((action: { user: UserCreateRequest }) => action.user),
+      withLatestFrom(this.afAuth.authState.pipe(take(1))),
+      map(([user, state]) => ({
+        ...user,
+        uid: state!.uid,
+        email: state!.email,
+        created: serverTimestamp(),
+      })),
+      switchMap((user) =>
+        from(this.afs.collection('users').doc(user.uid).set(user)).pipe(
+          tap(() => this.router.navigate(['/profile', user.uid])),
+          map(() => fromActions.createSuccess({ user: user as User })),
+          catchError((err) => of(fromActions.createError(err.messsage)))
+        )
+      )
+    );
+  });
+
+  update = createEffect(() => {
+    return this.actions.pipe(
+      ofType(fromActions.Types.UPDATE),
+      map((action: { user: User }) => action.user),
+      switchMap((user) =>
+        from(this.afs.collection('users').doc(user.uid).set(user)).pipe(
+          tap(() => this.router.navigate(['profile', user.uid])),
+          map(() => fromActions.updateSuccess({ user })),
+          catchError((err) => of(fromActions.updateError(err.message)))
         )
       )
     );

@@ -1,7 +1,6 @@
 import { User } from './user.models';
 import * as fromActions from './user.actions';
 import { createReducer, on } from '@ngrx/store';
-import { state } from '@angular/animations';
 
 export interface UserState {
   entity: User;
@@ -95,6 +94,9 @@ export const reducer = createReducer(
     loading: false,
     error: error,
   })),
+
+  //Sign in
+
   on(fromActions.signInEmail, (state) => ({ ...state, loading: true })),
   on(fromActions.signInEmailSuccess, (state, { user, uid }) => ({
     ...state,
@@ -108,6 +110,9 @@ export const reducer = createReducer(
     error: error,
     loading: false,
   })),
+
+  //Sign up
+
   on(fromActions.signUpEmail, (state) => ({ ...state, loading: true })),
   on(fromActions.signUpEmailSuccess, (state, { uid }) => ({
     ...state,
@@ -119,11 +124,42 @@ export const reducer = createReducer(
     error: error,
     loading: false,
   })),
+
+  //Sign out
+
   on(fromActions.signOut, (state) => ({ ...state, loading: true })),
   on(fromActions.signOutSuccess, (state) => ({ ...initialState })),
   on(fromActions.signOutError, (state, { error }) => ({
     ...state,
     error: error,
     loading: false,
+  })),
+
+  //Create
+
+  on(fromActions.create, (state) => ({ ...state, loading: true, error: '' })),
+  on(fromActions.createSuccess, (state, { user }) => ({
+    ...state,
+    entity: user,
+    loading: false,
+  })),
+  on(fromActions.createError, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error: error,
+  })),
+
+  //Update
+
+  on(fromActions.update, (state) => ({ ...state, loading: true, error: '' })),
+  on(fromActions.updateSuccess, (state, { user }) => ({
+    ...state,
+    entity: user,
+    loading: false,
+  })),
+  on(fromActions.updateError, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error: error,
   }))
 );

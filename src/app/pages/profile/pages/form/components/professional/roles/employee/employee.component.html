@@ -22,7 +22,8 @@
   >
     <app-select
       formControlName="specialization"
-      [items]="dictionaries?.specializations?.controlItems"
+      [items]="controls['specialization'].items"
+      (changed)="controls['specialization'].changed?.()"
     ></app-select>
   </app-form-field>
 
@@ -33,7 +34,7 @@
   >
     <app-select
       formControlName="qualification"
-      [items]="dictionaries?.qualifications?.controlItems"
+      [items]="controls['qualification'].items"
     ></app-select>
   </app-form-field>
   <app-form-field
@@ -43,7 +44,7 @@
   >
     <app-checkboxes
       formControlName="skills"
-      [items]="dictionaries?.skills?.controlItems"
+      [items]="controls['skills'].items"
     ></app-checkboxes>
   </app-form-field>
 </form>
