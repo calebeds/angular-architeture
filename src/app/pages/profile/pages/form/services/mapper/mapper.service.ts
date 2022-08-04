@@ -28,10 +28,12 @@ export class MapperService {
     if (user.roleId === 'employee') {
       const role = user.role as Employee;
       const formRole: EmployeeForm = {
-        expectedSalary: role.expectedSalary,
-        specialization: role.specialization.id,
-        qualification: role.qualification.id,
-        skills: role.skills.map((x) => x.id),
+        expectedSalary: role.expectedSalary ? role.expectedSalary : ({} as any),
+        specialization: role.specialization
+          ? role.specialization.id
+          : ({} as any),
+        qualification: role.qualification ? role.qualification.id : ({} as any),
+        skills: role.skills ? role.skills.map((x) => x.id) : ({} as any),
         experiences: role.experiences,
       };
 
@@ -61,7 +63,9 @@ export class MapperService {
       roleId: form.professional.roleId,
       country: form.personal.country,
       about: form.professional.about,
-      role: form ? this.getRole(form, dictionaries) : ({} as any),
+      role: form.professional.role
+        ? this.getRole(form, dictionaries)
+        : ({} as any),
     };
   }
 
@@ -79,7 +83,9 @@ export class MapperService {
       roleId: form.professional.roleId,
       country: form.personal.country,
       about: form.professional.about,
-      role: form ? this.getRole(form, dictionaries) : ({} as any),
+      role: form.professional.role
+        ? this.getRole(form, dictionaries)
+        : ({} as any),
     };
   }
 

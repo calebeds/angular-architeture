@@ -30,7 +30,7 @@ export interface ProfessionalForm {
 })
 export class ProfessionalComponent implements OnInit, OnDestroy {
   @Input()
-  value!: ProfessionalForm | undefined;
+  value!: ProfessionalForm;
 
   @Input()
   dictionaries!: Dictionaries | null;
@@ -73,6 +73,7 @@ export class ProfessionalComponent implements OnInit, OnDestroy {
           this.form.updateValueAndValidity(this.form.value);
           this.cdr.detectChanges();
         } else {
+          this.changed.emit(this.form.value);
         }
         this.stepper[type].next(this.form.valid);
       });

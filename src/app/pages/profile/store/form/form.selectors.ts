@@ -1,4 +1,3 @@
-import { Form } from '@angular/forms';
 import { createSelector } from '@ngrx/store';
 import { getProfileState, ProfileState } from '..';
 import { FormState } from './form.reducer';

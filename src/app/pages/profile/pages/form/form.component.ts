@@ -4,7 +4,16 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Observable, Subject, switchMap, takeUntil, zip } from 'rxjs';
+import {
+  filter,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+  zip,
+} from 'rxjs';
 import { StepperService } from './components/stepper/services';
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from '@app/store';
@@ -14,7 +23,7 @@ import * as fromForm from '../../store/form';
 import { Dictionaries } from '@app/store/dictionaries';
 import { PersonalForm } from './components/personal/personal.component';
 import { ProfessionalForm } from './components/professional/professional.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MapperService } from './services';
 
 export interface ProfileForm {
@@ -35,6 +44,8 @@ export class FormComponent implements OnInit, OnDestroy {
   personal$ = new Observable<PersonalForm>();
   professional$ = new Observable<ProfessionalForm>();
 
+  loading$ = new Observable<boolean>();
+
   private profile$ = new Observable<ProfileForm>();
   private user!: fromUser.User;
 
@@ -51,6 +62,8 @@ export class FormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.route.snapshot.data['user'];
+    console.log('user', this.user);
+    console.log(this.route.snapshot.data['user']);
     this.isEditing = !!this.user;
 
     this.profile$ = this.store.pipe(select(fromForm.getFormState));
@@ -64,6 +77,8 @@ export class FormComponent implements OnInit, OnDestroy {
     this.dictionariesIsReady$ = this.store.pipe(
       select(fromDictionaries.getIsReady)
     );
+
+    this.loading$ = this.store.pipe(select(fromUser.getLoading));
 
     if (this.user) {
       const form = this.mapper.userToForm(this.user);
@@ -85,21 +100,28 @@ export class FormComponent implements OnInit, OnDestroy {
       });
 
     this.stepper.cancel$.pipe(takeUntil(this.destroy)).subscribe(() => {
-      console.log('Canceled!');
+      this.router.navigate(['/profile', this.user.uid]);
     });
   }
 
   ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.complete();
+    this.store.dispatch(fromForm.clear());
+  }
+
+  get title(): string {
+    return this.isEditing ? 'Editing Profile' : 'New Profile';
   }
 
   onChangePersonal(data: PersonalForm): void {
     this.store.dispatch(fromForm.update({ changes: { personal: data } }));
+    console.log('Personal Change triggered');
   }
 
   onChangeProfissional(data: ProfessionalForm): void {
     this.store.dispatch(fromForm.update({ changes: { professional: data } }));
+    console.log('Professional Change triggered');
   }
 
   private onComplete(
@@ -111,6 +133,9 @@ export class FormComponent implements OnInit, OnDestroy {
       const request = this.mapper.formToUserUpdate(profile, user, dictionaries);
       this.store.dispatch(fromUser.update({ user: request }));
     } else {
+      console.log(user);
+      console.log(profile);
+      console.log(dictionaries);
       const request = this.mapper.formToUserCreate(profile, dictionaries);
       this.store.dispatch(fromUser.create({ user: request }));
     }

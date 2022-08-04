@@ -3,7 +3,7 @@ import { Resolve } from '@angular/router';
 import * as fromRoot from '@app/store';
 import * as fromUser from '@app/store/user';
 import { select, Store } from '@ngrx/store';
-import { filter, Observable, take } from 'rxjs';
+import { filter, Observable, take, tap } from 'rxjs';
 
 @Injectable()
 export class UserResolver implements Resolve<fromUser.User> {
@@ -12,7 +12,12 @@ export class UserResolver implements Resolve<fromUser.User> {
   resolve(): Observable<fromUser.User> {
     return this.store.pipe(
       select(fromUser.getUser),
-      filter((user) => !!user),
+      tap((user) => {
+        console.log('AQUI O RESOLVER:' + user.name);
+      }),
+      filter(
+        (user) => user.roleId === 'employee' || user.roleId === 'recruiter'
+      ),
       take(1)
     );
   }

@@ -14,7 +14,7 @@ export const initialState: FormState = {
 
 export const reducer = createReducer(
   initialState,
-  on(fromActions.set, (state) => ({ ...state })),
-  on(fromActions.update, (state) => ({ ...state })),
-  on(fromActions.clear, (state) => ({ ...state }))
+  on(fromActions.set, (state, { form }) => ({ ...state, ...form })),
+  on(fromActions.update, (state, { changes }) => ({ ...state, ...changes })),
+  on(fromActions.clear, (state) => ({ ...initialState }))
 );

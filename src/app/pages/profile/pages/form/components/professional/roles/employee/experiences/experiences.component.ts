@@ -22,7 +22,7 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
   @Input()
   public values: ExperienceForm[] | undefined;
 
-  form = new FormArray([]);
+  form!: FormArray;
 
   get experiences() {
     return (this.parent.controls[this.name] as FormArray)
@@ -39,9 +39,11 @@ export class ExperiencesComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   private init(): void {
-    this.form = this.fb.array([]);
+    this.form = this.fb.array(
+      this.getFormGroupArray(this.values as ExperienceForm[])
+    );
 
-    this.parent?.addControl(this.name, this.form);
+    this.parent.addControl(this.name, this.form);
   }
 
   private getFormGroupArray(values: ExperienceForm[]): FormGroup[] {
