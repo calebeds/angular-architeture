@@ -16,11 +16,13 @@ export class AppComponent implements OnInit {
   title = 'course-app';
 
   isAuthorized$: Observable<boolean> = of(false);
+  user$ = new Observable<fromUser.User>();
 
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
     this.isAuthorized$ = this.store.pipe(select(fromUser.getIsAuthorized));
+    this.user$ = this.store.pipe(select(fromUser.getUser));
     this.store.dispatch(fromUser.init());
     this.store.dispatch(fromDictionaries.read());
   }

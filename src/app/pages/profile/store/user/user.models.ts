@@ -1,1 +1,1 @@
-export { User } from '@app/models/backend/user';
+export { User, Employee, Recruiter } from '@app/models/backend/user';
