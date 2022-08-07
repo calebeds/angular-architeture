@@ -7,6 +7,19 @@
     <div class="photo">
       <app-user-photo [photoURL]="user.photoURL"></app-user-photo>
     </div>
+
+    <p><b>About:</b> {{ user.about }}</p>
+
+    <ng-container [ngSwitch]="user.roleId">
+      <app-employee
+        *ngSwitchCase="'employee'"
+        [role]="getEmployee(user)"
+      ></app-employee>
+      <app-recruiter
+        *ngSwitchCase="'recruiter'"
+        [role]="getRecruiter(user)"
+      ></app-recruiter>
+    </ng-container>
   </div>
 
   <div class="app-page__footer">

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 // import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 import { select, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { filter, Observable, of, take } from 'rxjs';
 import * as fromRoot from './store';
 import * as fromDictionaries from './store/dictionaries';
 import * as fromUser from './store/user';
@@ -24,7 +24,15 @@ export class AppComponent implements OnInit {
     this.isAuthorized$ = this.store.pipe(select(fromUser.getIsAuthorized));
     this.user$ = this.store.pipe(select(fromUser.getUser));
     this.store.dispatch(fromUser.init());
-    this.store.dispatch(fromDictionaries.read());
+    this.store
+      .pipe(select(fromUser.getUserState))
+      .pipe(
+        filter((state) => !!state.uid),
+        take(1)
+      )
+      .subscribe(() => {
+        this.store.dispatch(fromDictionaries.read());
+      });
   }
 
   onSignOut(): void {

@@ -20,6 +20,7 @@ import {
 import { ActivatedRoute, Params } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { user } from '@angular/fire/auth';
+import { Employee, Recruiter, User } from '@app/store/user/';
 
 @Component({
   selector: 'app-display',
@@ -59,5 +60,13 @@ export class DisplayComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.store.dispatch(fromProfileUser.clear());
+  }
+
+  getEmployee(user: User): Employee {
+    return user.role as Employee;
+  }
+
+  getRecruiter(user: User): Recruiter {
+    return user.role as Recruiter;
   }
 }
