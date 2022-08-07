@@ -3,15 +3,20 @@ import { CommonModule } from '@angular/common';
 
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeesComponent } from './employees.component';
-
+import { StoreModule } from '@ngrx/store';
+import { effects, reducers } from './store';
+import { EffectsModule } from '@ngrx/effects';
+import { UserPhotoModule } from '@app/shared';
+import { EmployeeComponent } from './components/employee/employee.component';
 
 @NgModule({
-  declarations: [
-    EmployeesComponent
-  ],
+  declarations: [EmployeesComponent, EmployeeComponent],
   imports: [
     CommonModule,
-    EmployeesRoutingModule
-  ]
+    StoreModule.forFeature('employees', reducers),
+    EffectsModule.forFeature(effects),
+    EmployeesRoutingModule,
+    UserPhotoModule,
+  ],
 })
-export class EmployeesModule { }
+export class EmployeesModule {}
